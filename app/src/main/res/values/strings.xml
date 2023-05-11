@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mareu</string>
+    <string name="delete_meeting">delete meeting</string>
+    <string name="meeting_color">Meeting color</string>
 </resources>
