@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/meeting_color"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:src="@drawable/circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -17,23 +19,29 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/meeting_color"
         app:layout_constraintEnd_toStartOf="@+id/on_delete_meeting"
         app:layout_constraintStart_toEndOf="@+id/meeting_color"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintTop_toTopOf="@+id/meeting_color">
+
         <TextView
+            android:id="@+id/meeting_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:textSize="16sp"
-            android:maxLines="1"
+            android:textStyle="bold"
             tools:text="Meeting A - 14h00 - Peach" />
+
         <TextView
+            android:id="@+id/meeting_item_participants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="12sp"
             tools:text="maxime@lamzone.com, alex@lamazone, viviane@lamzone" />
     </LinearLayout>
 
@@ -42,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:src="@drawable/baseline_delete_24"
+        android:background="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
