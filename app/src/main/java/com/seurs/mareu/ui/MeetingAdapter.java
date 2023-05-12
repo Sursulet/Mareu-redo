@@ -1,5 +1,6 @@
 package com.seurs.mareu.ui;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         private final ImageView mMeetingColor;
         private final TextView mMeetingItemTitle;
         private final TextView mMeetingParticipants;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -31,10 +33,14 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         }
     }
 
+    public MeetingAdapter(List<Meeting> mMeetings) {
+        this.mMeetings = mMeetings;
+    }
+
     @NonNull
     @Override
     public MeetingAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meeting_row_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meeting_row_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -42,7 +48,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     public void onBindViewHolder(@NonNull MeetingAdapter.ViewHolder holder, int position) {
         Meeting mMeeting = mMeetings.get(position);
         holder.mMeetingItemTitle.setText(mMeeting.getPlace());
-        holder.mMeetingParticipants.setText(mMeeting.getParticipants());
+        holder.mMeetingParticipants.setText(TextUtils.join(",", mMeeting.getParticipants()));
     }
 
     @Override
