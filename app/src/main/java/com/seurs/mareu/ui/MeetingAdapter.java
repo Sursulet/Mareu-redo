@@ -26,7 +26,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         void onDeleteClick(int position);
     }
 
-    public void setOnClickListener(OnClickListener listener) { mListener = listener; }
+    public void setOnClickListener(OnClickListener listener) {
+        mListener = listener;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView mMeetingColor;
@@ -47,7 +49,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
-                        if(position != RecyclerView.NO_POSITION) {
+                        if (position != RecyclerView.NO_POSITION) {
                             listener.onDeleteClick(position);
                         }
                     }
@@ -64,7 +66,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     @Override
     public MeetingAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meeting_row_item, parent, false);
-        return new ViewHolder(view,mListener);
+        return new ViewHolder(view, mListener);
     }
 
     @Override
@@ -77,9 +79,5 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mMeetings.size();
-    }
-
-    interface OnDeleteItemClickListener {
-        void onDeleteItemClick();
     }
 }
