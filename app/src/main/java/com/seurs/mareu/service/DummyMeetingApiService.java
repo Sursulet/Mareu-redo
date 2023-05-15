@@ -12,4 +12,9 @@ public class DummyMeetingApiService implements MeetingApiService {
     public List<Meeting> getMeetings() {
         return mMeetings;
     }
+
+    @Override
+    public void onDeleteMeeting(Meeting meeting) {
+        mMeetings.remove(meeting);
+    }
 }
