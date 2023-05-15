@@ -24,8 +24,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/meeting_color"
         app:layout_constraintEnd_toStartOf="@+id/on_delete_meeting"
         app:layout_constraintStart_toEndOf="@+id/meeting_color"
-        app:layout_constraintTop_toTopOf="@+id/meeting_color"
-        tools:ignore="UnknownId">
+        app:layout_constraintTop_toTopOf="@+id/meeting_color">
 
         <TextView
             android:id="@+id/meeting_item_title"
