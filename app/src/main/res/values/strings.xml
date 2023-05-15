@@ -3,6 +3,7 @@
     <string name="delete_meeting">delete meeting</string>
     <string name="meeting_color">Meeting color</string>
     <string name="filter">filter</string>
-    <string name="filter_by_date">by date</string>
-    <string name="filter_by_place">by place</string>
+    <string name="filter_by_date">filter by date</string>
+    <string name="filter_by_place">filter by place</string>
+    <string name="add_a_meeting">Add a meeting</string>
 </resources>
