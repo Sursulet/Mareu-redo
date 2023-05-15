@@ -52,6 +52,13 @@ public class MainActivity extends AppCompatActivity {
         List<Meeting> mMeetings = mService.getMeetings();
         MeetingAdapter mAdapter = new MeetingAdapter(mMeetings);
         mRecyclerview.setAdapter(mAdapter);
+        mAdapter.setOnClickListener(new MeetingAdapter.OnClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                mService.onDeleteMeeting(mMeetings.get(position));
+                mAdapter.notifyItemRemoved(position);
+            }
+        });
     }
 
     @Override
