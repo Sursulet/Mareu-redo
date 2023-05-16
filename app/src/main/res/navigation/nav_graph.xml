@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ListMeetingFragment">
+
+    <fragment
+        android:id="@+id/ListMeetingFragment"
+        android:name="com.seurs.mareu.ui.ListMeetingFragment"
+        android:label="List Meeting Fragment"
+        tools:layout="@layout/fragment_list_meeting">
+        <action
+            android:id="@+id/action_ListMeetingFragment_to_AddMeetingFragment"
+            app:destination="@id/AddMeetingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/AddMeetingFragment"
+        android:name="com.seurs.mareu.ui.AddMeetingFragment"
+        android:label="Add Meeting Fragment"
+        tools:layout="@layout/fragment_add_meeting">
+        <action
+            android:id="@+id/action_AddMeetingFragment_to_ListMeetingFragment"
+            app:destination="@id/ListMeetingFragment" />
+    </fragment>
+</navigation>
