@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.seurs.mareu.databinding.ActivityMainBinding;
 import com.seurs.mareu.di.DI;
 import com.seurs.mareu.model.Meeting;
 import com.seurs.mareu.service.MeetingApiService;
@@ -28,10 +29,14 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton mFab;
     RecyclerView mRecyclerview;
 
+    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mService = DI.getMeetingApiService();
 
