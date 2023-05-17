@@ -1,14 +1,15 @@
 package com.seurs.mareu.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.seurs.mareu.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.seurs.mareu.databinding.FragmentAddMeetingBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +18,7 @@ import com.seurs.mareu.R;
  */
 public class AddMeetingFragment extends Fragment {
 
+    private FragmentAddMeetingBinding binding;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,9 +60,14 @@ public class AddMeetingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_meeting, container, false);
+        binding = FragmentAddMeetingBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }
