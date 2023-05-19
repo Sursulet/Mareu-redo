@@ -55,22 +55,17 @@ public class ListMeetingFragment extends Fragment {
             }
             return false;
         });
-        binding.onAddMeeting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(ListMeetingFragment.this).navigate(R.id.action_ListMeetingFragment_to_AddMeetingFragment);
-                Snackbar.make(view, "Add a new meeting", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
+
+        binding.onAddMeeting.setOnClickListener(view1 -> {
+            NavHostFragment.findNavController(ListMeetingFragment.this).navigate(R.id.action_ListMeetingFragment_to_AddMeetingFragment);
+            Snackbar.make(view1, "Add a new meeting", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         });
 
         binding.meetingList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.meetingList.setAdapter(mAdapter);
-        mAdapter.setOnClickListener(new MeetingAdapter.OnClickListener() {
-            @Override
-            public void onDeleteClick(int position) {
-                mService.onDeleteMeeting(mMeetings.get(position));
-                mAdapter.notifyItemRemoved(position);
-            }
+        mAdapter.setOnClickListener(position -> {
+            mService.onDeleteMeeting(mMeetings.get(position));
+            mAdapter.notifyItemRemoved(position);
         });
     }
 
