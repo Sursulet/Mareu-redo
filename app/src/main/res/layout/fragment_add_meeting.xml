@@ -32,43 +32,43 @@
             android:padding="@dimen/fab_margin">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/topic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_topic"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/topic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_place"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/place"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                style="@style/Widget.Material3.Button.TextButton"
                 android:id="@+id/on_add_hour"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Text button"
-                />
+                android:hint="@string/on_add_hour_hint" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/on_add_participant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_participants"
-                app:endIconMode="clear_text">
+                app:endIconMode="clear_text"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -79,7 +79,7 @@
                 android:id="@+id/participants"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                
+
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
