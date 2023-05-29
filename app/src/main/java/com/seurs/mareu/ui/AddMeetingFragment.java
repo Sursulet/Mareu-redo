@@ -3,10 +3,7 @@ package com.seurs.mareu.ui;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
@@ -22,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.textfield.TextInputLayout;
 import com.seurs.mareu.R;
 import com.seurs.mareu.databinding.FragmentAddMeetingBinding;
 import com.seurs.mareu.di.DI;
@@ -31,7 +28,6 @@ import com.seurs.mareu.service.MeetingApiService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 public class AddMeetingFragment extends Fragment {
 
@@ -39,6 +35,9 @@ public class AddMeetingFragment extends Fragment {
     private FragmentAddMeetingBinding binding;
     Calendar c;
     int lastLength = 0, chipLength = 4;
+    String isValidateTopic = "";
+    String isValidatePlace = "";
+    ArrayList<String> isValidateParticipants = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,20 +61,22 @@ public class AddMeetingFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_on_save) {
-                    Meeting mNewMeeting = new Meeting(
-                            "",
-                            binding.place.getEditText().getText().toString(),
-                            binding.topic.getEditText().getText().toString(),
-                            new ArrayList<String>()
-                    );
-                    mService.onAddMeeting(mNewMeeting);
+                    if (validate()) {
+                        Meeting mNewMeeting = new Meeting(
+                                binding.onAddHour.getText().toString(),
+                                isValidatePlace,
+                                isValidateTopic,
+                                new ArrayList<String>()
+                        );
+                        mService.onAddMeeting(mNewMeeting);
+                    }
                     return true;
                 }
                 return false;
             }
         });
 
-        binding.topic.getEditText().addTextChangedListener(new TextWatcher() {
+        binding.topic.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
             }
@@ -86,6 +87,24 @@ public class AddMeetingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                //isValidateTopic = editable.length() > 0;
+                isValidateTopic = editable.length() > 0 ? editable.toString() : "";
+            }
+        });
+
+        binding.place.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //isValidatePlace = editable.length() > 0;
+                isValidatePlace = editable.length() > 0 ? editable.toString() : "";
             }
         });
 
@@ -106,20 +125,14 @@ public class AddMeetingFragment extends Fragment {
             }
         });
 
-        binding.onAddParticipant.setEndIconOnClickListener(new View.OnClickListener() {
+        /*binding.onAddParticipant.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (binding.onAddParticipant.getEditText() != null) {
                     binding.onAddParticipant.getEditText().getText().clear();
                 }
             }
-        });
-        ChipDrawable chipDrawable = ChipDrawable.createFromResource(requireContext(), R.xml.standalone_chip);
-        chipDrawable.setBounds(0, 0, chipDrawable.getIntrinsicWidth(), chipDrawable.getIntrinsicHeight());
-        ImageSpan span = new ImageSpan(chipDrawable);
-        Editable text = Objects.requireNonNull(binding.onAddParticipant.getEditText()).getText();
-        text.setSpan(span, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+        });*/
 
         binding.onAddParticipant.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -128,10 +141,6 @@ public class AddMeetingFragment extends Fragment {
                  * This method is called to notify you that, within s,
                  * the count characters beginning at start are about to be replaced by new text with length after.
                  */
-                Log.d("PEACH", "beforeTextChanged: " + s + "," + start + "," + count + "," + after);
-
-                s = "Bottom: span.\nBaseline: span";
-                //lastlenght = charSequence.length();
             }
 
             @Override
@@ -140,20 +149,6 @@ public class AddMeetingFragment extends Fragment {
                  * This method is called to notify you that, within s,
                  * the count characters beginning at start have just replaced old text that had length before.
                  */
-                Log.d("PEACH", "onTextChanged: " + s + "," + start + "," + before + "," + count);
-
-                /*if (s.charAt(s.length() - 1) == 32) {
-                    Log.d("PEACH", "onTextChanged: onTextChanged" + s);
-                    String email = s.toString();
-                    Chip chip = new Chip(requireContext());
-                    binding.onAddParticipant.getEditText().setError("gdsg");
-                }*/
-                /*try {
-                    if (lastlenght > s.length()) return;
-
-                } catch (IndexOutOfBoundsException ex) {
-                    //
-                }*/
 
                 if (s.length() == lastLength - chipLength) {
                     lastLength = s.length();
@@ -166,18 +161,35 @@ public class AddMeetingFragment extends Fragment {
                  * This method is called to notify you that, somewhere within s,
                  * the text has been changed.
                  */
-                Log.d("PEACH", "afterTextChanged: " + s);
 
-                if (s.charAt(s.length() - 1) == 32) {
-                    //SpannableString string = new SpannableString("Bottom: span.\nBaseline: span");
+                //Boolean test = Patterns.EMAIL_ADDRESS.matcher(s).matches();
+                //Log.d("PEACH", "afterTextChanged: "+ s.length() + "//" + test);
+                //Log.d("PEACH", "afterTextChanged: " + validateEmailAddress(s));
+                //if (s.charAt(s.length() - 1) == 32) {
+                    /*if (validateEmailAddress(s)) {
+                        Log.d("PEACH", "afterTextChanged: IT'S A MAIL");
+                        binding.onAddParticipant.setError(null);
+
+                        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip,null,false);
+                        chip.setText(s);
+                        binding.participants.addView(chip);
+                        //binding.onAddParticipant.getEditText().getText().clear();
+                        binding.onAddParticipant.setError("");
+                    } else {
+                        binding.onAddParticipant.setError("Invalid Email !");
+                    }*/
+                    /*
                     ChipDrawable chip = ChipDrawable.createFromResource(requireContext(), R.xml.standalone_chip);
                     chip.setText(s.subSequence(lastLength, s.length()));
                     chip.setBounds(0, 0, chip.getIntrinsicWidth(), chip.getIntrinsicHeight());
                     s.setSpan(new ImageSpan(chip), lastLength, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     lastLength = s.length();
-                    //s.setSpan(new ImageSpan(requireContext(), R.mipmap.ic_launcher), 7, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    //s.setSpan(new ImageSpan(requireContext(), R.mipmap.ic_launcher, DynamicDrawableSpan.ALIGN_BASELINE), 22, 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
+
+                     */
+
+
+                //s.clear();
+                //}
                 // Btn Save setEnabled(editable.length() > 0);
             }
         });
@@ -185,7 +197,6 @@ public class AddMeetingFragment extends Fragment {
         binding.onAddParticipant/*.getEditText()*/.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                Log.d("PEACH", "onKey: HELLO");
                 if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
                     Editable name = binding.onAddParticipant.getEditText().getText();
                     if (!validateEmailAddress(name)) {
@@ -197,17 +208,31 @@ public class AddMeetingFragment extends Fragment {
                 return false;
             }
         });
+
+        binding.onAddParticipant.addOnEditTextAttachedListener(new TextInputLayout.OnEditTextAttachedListener() {
+            @Override
+            public void onEditTextAttached(@NonNull TextInputLayout textInputLayout) {
+
+            }
+        });
     }
 
     private boolean validateEmailAddress(Editable s) {
-        String email = s.toString();
+        String email = s.toString().substring(0, s.length() - 1);
+        //String email = text.substring(text.length()-1);
+        Log.d("PEACH", "validateEmailAddress: " + email.substring(0, email.length() - 1));
 
-        if (email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(requireContext(), "Email Validated Successfully", Toast.LENGTH_SHORT).show();
             return true;
         } else {
+            Log.d("PEACH", "validateEmailAddress: EMAIL " + email);
             Toast.makeText(requireContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    public boolean validate() {
+        return !isValidateTopic.isEmpty() && !isValidatePlace.isEmpty() && !isValidateParticipants.isEmpty();
     }
 }
