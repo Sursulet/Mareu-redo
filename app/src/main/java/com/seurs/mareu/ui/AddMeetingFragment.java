@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.chip.Chip;
 import com.seurs.mareu.R;
 import com.seurs.mareu.databinding.FragmentAddMeetingBinding;
 import com.seurs.mareu.di.DI;
@@ -28,12 +27,14 @@ import com.seurs.mareu.service.MeetingApiService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class AddMeetingFragment extends Fragment {
 
     private MeetingApiService mService;
     private FragmentAddMeetingBinding binding;
     Calendar c;
+
     int lastLength = 0, chipLength = 4;
     String isValidateTopic = "";
     String isValidatePlace = "";
@@ -66,7 +67,7 @@ public class AddMeetingFragment extends Fragment {
                                 binding.onAddHour.getText().toString(),
                                 isValidatePlace,
                                 isValidateTopic,
-                                new ArrayList<String>()
+                                isValidateParticipants
                         );
                         mService.onAddMeeting(mNewMeeting);
                     }
@@ -125,16 +126,27 @@ public class AddMeetingFragment extends Fragment {
             }
         });
 
-        /*binding.onAddParticipant.setEndIconOnClickListener(new View.OnClickListener() {
+        binding.onAddParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (binding.onAddParticipant.getEditText() != null) {
-                    binding.onAddParticipant.getEditText().getText().clear();
+                if (validateEmailAddress(Objects.requireNonNull(binding.participant.getText()))) {
+                    Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip, null, false);
+                    chip.setText(binding.participant.getText());
+                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            binding.participants.removeView(view);
+                            isValidateParticipants.remove(view.toString());
+                        }
+                    });
+
+                    binding.participants.addView(chip);
+                    isValidateParticipants.add(chip.getText().toString());
                 }
             }
-        });*/
+        });
 
-        binding.onAddParticipant.getEditText().addTextChangedListener(new TextWatcher() {
+        binding.participant.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 /*
@@ -156,11 +168,13 @@ public class AddMeetingFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable editable) {
                 /*
                  * This method is called to notify you that, somewhere within s,
                  * the text has been changed.
                  */
+
+                binding.onAddParticipant.setEnabled(editable.length() > 0);
 
                 //Boolean test = Patterns.EMAIL_ADDRESS.matcher(s).matches();
                 //Log.d("PEACH", "afterTextChanged: "+ s.length() + "//" + test);
@@ -194,7 +208,7 @@ public class AddMeetingFragment extends Fragment {
             }
         });
 
-        binding.onAddParticipant/*.getEditText()*/.setOnKeyListener(new View.OnKeyListener() {
+        /*binding.onAddParticipant.getEditText().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
@@ -207,20 +221,13 @@ public class AddMeetingFragment extends Fragment {
                 }
                 return false;
             }
-        });
-
-        binding.onAddParticipant.addOnEditTextAttachedListener(new TextInputLayout.OnEditTextAttachedListener() {
-            @Override
-            public void onEditTextAttached(@NonNull TextInputLayout textInputLayout) {
-
-            }
-        });
+        });*/
     }
 
     private boolean validateEmailAddress(Editable s) {
-        String email = s.toString().substring(0, s.length() - 1);
+        String email = s.toString();//.substring(0, s.length() - 1);
         //String email = text.substring(text.length()-1);
-        Log.d("PEACH", "validateEmailAddress: " + email.substring(0, email.length() - 1));
+        Log.d("PEACH", "validateEmailAddress: " + email);
 
         if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(requireContext(), "Email Validated Successfully", Toast.LENGTH_SHORT).show();
