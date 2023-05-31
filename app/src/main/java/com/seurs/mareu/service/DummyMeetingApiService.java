@@ -22,4 +22,10 @@ public class DummyMeetingApiService implements MeetingApiService {
     public void onDeleteMeeting(Meeting meeting) {
         mMeetings.remove(meeting);
     }
+
+    private final List<Integer> mPlaces = DummyMeetingGenerator.generatePlaces();
+    @Override
+    public List<Integer> getPlaces() {
+        return mPlaces;
+    }
 }
