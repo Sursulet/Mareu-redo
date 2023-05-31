@@ -1,41 +1,46 @@
 package com.seurs.mareu.ui;
 
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.seurs.mareu.R;
 import com.seurs.mareu.databinding.FragmentAddMeetingBinding;
 import com.seurs.mareu.di.DI;
 import com.seurs.mareu.model.Meeting;
 import com.seurs.mareu.service.MeetingApiService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
+import java.util.TimeZone;
 
 public class AddMeetingFragment extends Fragment {
 
     private MeetingApiService mService;
     private FragmentAddMeetingBinding binding;
+    private List<Integer> mPlaces;
+    private PlaceAdapter mAdapter;
     Calendar c;
-
-    int lastLength = 0, chipLength = 4;
     String isValidateTopic = "";
     String isValidatePlace = "";
     ArrayList<String> isValidateParticipants = new ArrayList<>();
@@ -44,6 +49,8 @@ public class AddMeetingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mService = DI.getMeetingApiService();
+        mPlaces = mService.getPlaces();
+        mAdapter = new PlaceAdapter(mPlaces);
         c = Calendar.getInstance();
     }
 
@@ -74,6 +81,15 @@ public class AddMeetingFragment extends Fragment {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        binding.colorsList.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.colorsList.setAdapter(mAdapter);
+        mAdapter.setOnClickListener(new PlaceAdapter.OnClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                
             }
         });
 
@@ -109,10 +125,36 @@ public class AddMeetingFragment extends Fragment {
             }
         });
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String date = dateFormat.format(c.getTime());
+
         binding.onAddHour.setText(c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE));
+        binding.onAddDate.setText(date);
+
+        MaterialDatePicker<Long> mMaterialDatePicker = MaterialDatePicker.Builder.datePicker().build();
+        MaterialTimePicker mMaterialTimePicker = new MaterialTimePicker.Builder()
+                .setTitleText("SELECT YOUR TIME")
+                .setHour(12)
+                .setMinute(10)
+                .setTimeFormat(TimeFormat.CLOCK_12H)
+                .build();
+        binding.onAddDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMaterialDatePicker.show(requireActivity().getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                mMaterialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                    @Override
+                    public void onPositiveButtonClick(Object selection) {
+                        binding.onAddDate.setText(mMaterialDatePicker.getHeaderText());
+                    }
+                });
+            }
+        });
+
         binding.onAddHour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
 
@@ -123,8 +165,73 @@ public class AddMeetingFragment extends Fragment {
                     }
                 }, hour, minute, false);
                 timePickerDialog.show();
+
+                 */
+
+                mMaterialTimePicker.show(requireActivity().getSupportFragmentManager(), "MATERIAL_TIME_PICKER");
+                mMaterialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int hourPicked = mMaterialTimePicker.getHour();
+                        int minutePicked = mMaterialTimePicker.getMinute();
+
+                        String formattedTime = "";
+                        if (hourPicked > 12) {
+                            if (minutePicked < 10) {
+                                formattedTime = hourPicked - 12 + ":0" + minutePicked + " pm";
+                            } else {
+                                formattedTime = hourPicked - 12 + ":" + minutePicked + " pm";
+                            }
+                        } else if (hourPicked == 12) {
+                            if (minutePicked < 10) {
+                                formattedTime = hourPicked + ":0" + minutePicked + " pm";
+                            } else {
+                                formattedTime = hourPicked + ":" + minutePicked + " pm";
+                            }
+                        } else if (hourPicked == 0) {
+                            if (minutePicked < 10) {
+                                formattedTime = hourPicked + 12 + ":0" + minutePicked + " am";
+                            } else {
+                                formattedTime = hourPicked + 12 + ":" + minutePicked + " am";
+                            }
+                        } else {
+                            if (minutePicked < 10) {
+                                formattedTime = hourPicked + ":0" + minutePicked + " am";
+                            } else {
+                                formattedTime = hourPicked + ":" + minutePicked + " am";
+                            }
+                        }
+
+                        binding.onAddHour.setText(formattedTime);
+                    }
+                });
             }
         });
+
+        /*mMaterialTimePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<>() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+
+
+
+                String formattedTime = "";
+                if (hourPicker>12) {
+                    if (minutePicker<10) {
+                        formattedTime = "ert";
+                    } else {
+                        formattedTime = "aze";
+                    }
+                } else if (hourPicker==12) {
+                    if (minutePicker<10) {
+                        formattedTime = "wxc";
+                    } else {
+                        formattedTime = "qsd";
+                    }
+                }
+
+                binding.onAddHour.setText(formattedTime);
+            }
+        });*/
 
         binding.onAddParticipant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,10 +268,6 @@ public class AddMeetingFragment extends Fragment {
                  * This method is called to notify you that, within s,
                  * the count characters beginning at start have just replaced old text that had length before.
                  */
-
-                if (s.length() == lastLength - chipLength) {
-                    lastLength = s.length();
-                }
             }
 
             @Override
@@ -174,66 +277,18 @@ public class AddMeetingFragment extends Fragment {
                  * the text has been changed.
                  */
 
-                binding.onAddParticipant.setEnabled(editable.length() > 0);
-
-                //Boolean test = Patterns.EMAIL_ADDRESS.matcher(s).matches();
-                //Log.d("PEACH", "afterTextChanged: "+ s.length() + "//" + test);
-                //Log.d("PEACH", "afterTextChanged: " + validateEmailAddress(s));
-                //if (s.charAt(s.length() - 1) == 32) {
-                    /*if (validateEmailAddress(s)) {
-                        Log.d("PEACH", "afterTextChanged: IT'S A MAIL");
-                        binding.onAddParticipant.setError(null);
-
-                        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.chip,null,false);
-                        chip.setText(s);
-                        binding.participants.addView(chip);
-                        //binding.onAddParticipant.getEditText().getText().clear();
-                        binding.onAddParticipant.setError("");
-                    } else {
-                        binding.onAddParticipant.setError("Invalid Email !");
-                    }*/
-                    /*
-                    ChipDrawable chip = ChipDrawable.createFromResource(requireContext(), R.xml.standalone_chip);
-                    chip.setText(s.subSequence(lastLength, s.length()));
-                    chip.setBounds(0, 0, chip.getIntrinsicWidth(), chip.getIntrinsicHeight());
-                    s.setSpan(new ImageSpan(chip), lastLength, s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    lastLength = s.length();
-
-                     */
-
-
-                //s.clear();
-                //}
-                // Btn Save setEnabled(editable.length() > 0);
+                //binding.onAddParticipant.setEnabled(editable.length() > 0);
             }
         });
-
-        /*binding.onAddParticipant.getEditText().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    Editable name = binding.onAddParticipant.getEditText().getText();
-                    if (!validateEmailAddress(name)) {
-                        binding.onAddParticipant.getEditText().setText("OK f");
-                        binding.onAddParticipant.getEditText().setError("gdsg");
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });*/
     }
 
     private boolean validateEmailAddress(Editable s) {
-        String email = s.toString();//.substring(0, s.length() - 1);
-        //String email = text.substring(text.length()-1);
-        Log.d("PEACH", "validateEmailAddress: " + email);
+        String email = s.toString();
 
         if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(requireContext(), "Email Validated Successfully", Toast.LENGTH_SHORT).show();
             return true;
         } else {
-            Log.d("PEACH", "validateEmailAddress: EMAIL " + email);
             Toast.makeText(requireContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
             return false;
         }
