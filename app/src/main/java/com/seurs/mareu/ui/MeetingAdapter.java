@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHolder> {
 
-    private List<Meeting> mMeetings;
+    private final List<Meeting> mMeetings;
     private OnClickListener mListener;
 
     public interface OnClickListener {
@@ -34,7 +34,6 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         private final ImageView mMeetingColor;
         private final TextView mMeetingItemTitle;
         private final TextView mMeetingParticipants;
-        private final ImageButton mOnDeleteMeeting;
 
         public ViewHolder(@NonNull View itemView, OnClickListener listener) {
             super(itemView);
@@ -42,7 +41,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
             mMeetingColor = itemView.findViewById(R.id.meeting_color);
             mMeetingItemTitle = itemView.findViewById(R.id.meeting_item_title);
             mMeetingParticipants = itemView.findViewById(R.id.meeting_item_participants);
-            mOnDeleteMeeting = itemView.findViewById(R.id.on_delete_meeting);
+            ImageButton mOnDeleteMeeting = itemView.findViewById(R.id.on_delete_meeting);
 
             mOnDeleteMeeting.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,8 +71,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MeetingAdapter.ViewHolder holder, int position) {
         Meeting mMeeting = mMeetings.get(position);
-        holder.mMeetingItemTitle.setText(mMeeting.getPlace());
-        holder.mMeetingParticipants.setText(TextUtils.join(",", mMeeting.getParticipants()));
+        holder.mMeetingColor.setColorFilter(mMeeting.getPlace());
+        holder.mMeetingItemTitle.setText(String.format("%s - %s - %s", mMeeting.getTopic(), mMeeting.getHour(), mMeeting.getManager()));
+        holder.mMeetingParticipants.setText(TextUtils.join(", ", mMeeting.getParticipants()));
     }
 
     @Override
