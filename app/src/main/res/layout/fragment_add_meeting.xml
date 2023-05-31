@@ -17,7 +17,6 @@
             app:menu="@menu/menu_add"
             app:navigationIcon="@drawable/baseline_close_24"
             app:title="Add a Meeting" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -31,9 +30,15 @@
             android:orientation="vertical"
             android:padding="@dimen/fab_margin">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/colors_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:hint="@string/hint_topic"
                 app:endIconMode="clear_text">
 
@@ -46,6 +51,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:hint="@string/hint_place"
                 app:endIconMode="clear_text">
 
@@ -55,16 +61,33 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/on_add_hour"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/on_add_hour_hint" />
+                android:layout_marginTop="@dimen/fab_margin"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/on_add_date"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/on_add_date_hint" />
+
+                <Button
+                    android:id="@+id/on_add_hour"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/on_add_hour_hint" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/fab_margin"
-                    android:text="add" />
+                    android:text="@string/add" />
             </LinearLayout>
 
             <com.google.android.material.chip.ChipGroup
