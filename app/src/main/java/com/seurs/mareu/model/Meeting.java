@@ -3,15 +3,19 @@ package com.seurs.mareu.model;
 import java.util.List;
 
 public class Meeting {
-    String hour;
-    String place;
     String topic;
+    String manager;
+    int place;
+    String date;
+    String hour;
     List<String> participants;
 
-    public Meeting(String hour, String place, String topic, List<String> participants) {
-        this.hour = hour;
-        this.place = place;
+    public Meeting(String topic, String manager, int place, String date, String hour, List<String> participants) {
         this.topic = topic;
+        this.manager = manager;
+        this.place = place;
+        this.date = date;
+        this.hour = hour;
         this.participants = participants;
     }
 
@@ -20,12 +24,20 @@ public class Meeting {
         return hour;
     }
 
-    public String getPlace() {
-        return place;
+    public String getManager() {
+        return manager;
     }
 
     public String getTopic() {
         return topic;
+    }
+
+    public int getPlace() {
+        return place;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public List<String> getParticipants() {
@@ -37,8 +49,8 @@ public class Meeting {
         this.hour = hour;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setManager(String place) {
+        this.manager = place;
     }
 
     public void setTopic(String topic) {
