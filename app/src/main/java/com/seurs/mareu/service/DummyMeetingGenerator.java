@@ -15,12 +15,12 @@ public class DummyMeetingGenerator {
 
     private static final List<String> DUMMY_MAILS = Arrays.asList("xyz@example.com", "abc@example.com", "uvw@example.com");
     public static List<Meeting> DUMMY_MEETINGS = Arrays.asList(
-            new Meeting( "Meeting A", "PEACH", 0xffef9a9a, "2020/02/26","09:00", DUMMY_MAILS),
-            new Meeting( "Meeting B", "MARIO", 0xffa5d6a7, "2020/03/28","10:00", DUMMY_MAILS),
-            new Meeting( "Meeting C", "LUIGI", 0xffa5d6a7, "2020/02/27","11:00", DUMMY_MAILS),
-            new Meeting( "Meeting D", "PEACH", 0Xff90caf9, "2020/03/20","14:00", DUMMY_MAILS),
-            new Meeting( "Meeting E", "MARIO", 0xffef9a9a, "2020/02/29","09:00", DUMMY_MAILS),
-            new Meeting( "Meeting F", "LUIGI", 0xfffff59d, "2021/02/29","09:00", DUMMY_MAILS)
+            new Meeting( "Meeting A", "PEACH", R.color.red_200, "2020/02/26","09:00", DUMMY_MAILS),
+            new Meeting( "Meeting B", "MARIO", R.color.green_200, "2020/03/28","10:00", DUMMY_MAILS),
+            new Meeting( "Meeting C", "LUIGI", R.color.green_200, "2020/02/27","11:00", DUMMY_MAILS),
+            new Meeting( "Meeting D", "PEACH", R.color.blue_200, "2020/03/20","14:00", DUMMY_MAILS),
+            new Meeting( "Meeting E", "MARIO", R.color.red_200, "2020/02/29","09:00", DUMMY_MAILS),
+            new Meeting( "Meeting F", "LUIGI", R.color.yellow_200, "2021/02/29","09:00", DUMMY_MAILS)
     );
 
     static List<Integer> generatePlaces() {
