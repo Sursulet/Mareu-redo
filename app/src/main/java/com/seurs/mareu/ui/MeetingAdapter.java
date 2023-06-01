@@ -1,5 +1,6 @@
 package com.seurs.mareu.ui;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
 
     private final List<Meeting> mMeetings;
     private OnClickListener mListener;
+    private Context mContext;
 
     public interface OnClickListener {
         //void onItemClick(int position);
@@ -57,8 +59,9 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
         }
     }
 
-    public MeetingAdapter(List<Meeting> mMeetings) {
+    public MeetingAdapter(List<Meeting> mMeetings, Context context) {
         this.mMeetings = mMeetings;
+        this.mContext = context;
     }
 
     @NonNull
@@ -71,7 +74,7 @@ public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MeetingAdapter.ViewHolder holder, int position) {
         Meeting mMeeting = mMeetings.get(position);
-        holder.mMeetingColor.setColorFilter(mMeeting.getPlace());
+        holder.mMeetingColor.setColorFilter(mContext.getResources().getColor(mMeeting.getPlace()));
         holder.mMeetingItemTitle.setText(String.format("%s - %s - %s", mMeeting.getTopic(), mMeeting.getHour(), mMeeting.getManager()));
         holder.mMeetingParticipants.setText(TextUtils.join(", ", mMeeting.getParticipants()));
     }
