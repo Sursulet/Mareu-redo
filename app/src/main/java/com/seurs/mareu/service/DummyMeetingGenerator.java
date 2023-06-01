@@ -31,10 +31,6 @@ public class DummyMeetingGenerator {
             R.color.red_200,
             R.color.green_200,
             R.color.blue_200,
-            R.color.yellow_200/*,
-            0xffffccbc,
-            Color.RED,
-            Color.GREEN,
-            Color.YELLOW*/
+            R.color.yellow_200
     );
 }
