@@ -1,7 +1,12 @@
 package com.seurs.mareu.service;
 
+import android.util.Log;
+
 import com.seurs.mareu.model.Meeting;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DummyMeetingApiService implements MeetingApiService {
@@ -27,5 +32,17 @@ public class DummyMeetingApiService implements MeetingApiService {
     @Override
     public List<Integer> getPlaces() {
         return mPlaces;
+    }
+
+    @Override
+    public List<Meeting> filterByDate() {
+        Collections.sort(mMeetings, (m1, m2) -> m1.getDate().compareTo(m2.getDate()));
+        return mMeetings;
+    }
+
+    @Override
+    public List<Meeting> filterByPlace() {
+        Collections.sort(mMeetings, (m1, m2) -> m1.getPlace().compareTo(m2.getPlace()));
+        return mMeetings;
     }
 }
