@@ -33,7 +33,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView, OnClickListener listener) {
             super(itemView);
-            mButton = itemView.findViewById(R.id.button);
+            /*mButton = itemView.findViewById(R.id.button);
 
             Log.d("PEACH", "ViewHolder: "+row_index);
             if (row_index == -1) {
@@ -60,7 +60,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
                         }
                     }
                 }
-            });
+            });*/
         }
     }
 
@@ -78,7 +78,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull PlaceAdapter.ViewHolder holder, int position) {
         Integer mPlace = mPlaces.get(position);
-        holder.mButton.setBackgroundColor(mPlace);
+        //holder.mButton.setBackgroundColor(mPlace);
         if (row_index == position) {
             holder.itemView.setBackgroundColor(Color.CYAN);
         } else {
