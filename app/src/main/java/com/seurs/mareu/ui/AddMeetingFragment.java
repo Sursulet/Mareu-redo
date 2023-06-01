@@ -3,7 +3,6 @@ package com.seurs.mareu.ui;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,19 +76,19 @@ public class AddMeetingFragment extends Fragment {
         }
     }
 
-    public boolean validate() {
+    public void validate() {
         if (binding.topic.getEditText() != null && binding.manager.getEditText() != null) {
             if (binding.topic.getEditText().getText().toString().isEmpty()) {
                 binding.topic.setError("Please, enter a topic !");
-                return false;
+                return;
             }
             if (binding.manager.getEditText().getText().toString().isEmpty()) {
                 binding.manager.setError("Please, enter a manager name");
-                return false;
+                return;
             }
             if (isValidateParticipants.isEmpty()) {
                 binding.participant.setError("Please, enter at least one participant email");
-                return false;
+                return;
             }
 
             Meeting mNewMeeting = new Meeting(
@@ -104,8 +103,6 @@ public class AddMeetingFragment extends Fragment {
 
             Toast.makeText(requireContext(), "Meeting Validated Successfully", Toast.LENGTH_SHORT).show();
         }
-
-        return true;
     }
 
     private void buildTopAppBar() {
@@ -115,11 +112,9 @@ public class AddMeetingFragment extends Fragment {
 
         binding.topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_on_save) {
-                if (validate()) {
-                    NavHostFragment.findNavController(AddMeetingFragment.this)
-                            .navigate(R.id.action_AddMeetingFragment_to_ListMeetingFragment);
-                }
-
+                validate();
+                NavHostFragment.findNavController(AddMeetingFragment.this)
+                        .navigate(R.id.action_AddMeetingFragment_to_ListMeetingFragment);
                 return true;
             }
             return false;
