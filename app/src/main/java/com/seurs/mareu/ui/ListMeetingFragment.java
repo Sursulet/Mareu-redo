@@ -32,7 +32,7 @@ public class ListMeetingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mService = DI.getMeetingApiService();
         mMeetings = mService.getMeetings();
-        mAdapter = new MeetingAdapter(mMeetings);
+        mAdapter = new MeetingAdapter(mMeetings,requireContext());
     }
 
     @Override
