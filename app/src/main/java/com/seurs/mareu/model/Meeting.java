@@ -5,12 +5,12 @@ import java.util.List;
 public class Meeting {
     String topic;
     String manager;
-    int place;
+    Integer place;
     String date;
     String hour;
     List<String> participants;
 
-    public Meeting(String topic, String manager, int place, String date, String hour, List<String> participants) {
+    public Meeting(String topic, String manager, Integer place, String date, String hour, List<String> participants) {
         this.topic = topic;
         this.manager = manager;
         this.place = place;
@@ -32,7 +32,7 @@ public class Meeting {
         return topic;
     }
 
-    public int getPlace() {
+    public Integer getPlace() {
         return place;
     }
 
