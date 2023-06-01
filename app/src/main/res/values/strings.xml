@@ -8,4 +8,16 @@
     <string name="filter_by_date">filter by date</string>
     <string name="filter_by_place">filter by place</string>
     <string name="add_a_meeting">Add a meeting</string>
+    <string name="title_activity_add_meeting">AddMeetingActivity</string>
+    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Save</string>
+    <string name="save_description">Save meeting</string>
+    <string name="hint_topic">Topic</string>
+    <string name="hint_manager">MANAGER</string>
+    <string name="hint_participants">Participants</string>
+    <string name="on_add_hour_hint">14 : 00</string>
+    <string name="add">add</string>
+    <string name="on_add_date_hint">dd/MM/yyyy</string>
 </resources>
