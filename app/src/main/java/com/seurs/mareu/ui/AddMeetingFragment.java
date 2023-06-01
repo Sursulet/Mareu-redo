@@ -16,6 +16,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -28,7 +30,9 @@ import com.seurs.mareu.service.MeetingApiService;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddMeetingFragment extends Fragment {
 
@@ -36,7 +40,7 @@ public class AddMeetingFragment extends Fragment {
     private FragmentAddMeetingBinding binding;
     private List<Integer> mPlaces;
     Calendar c;
-    ArrayList<String> isValidateParticipants = new ArrayList<>();
+    ArrayList<String> emails = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,18 +81,26 @@ public class AddMeetingFragment extends Fragment {
 
     public void validate() {
         if (binding.topic.getEditText() != null && binding.manager.getEditText() != null) {
-            if (binding.topic.getEditText().getText().toString().isEmpty()) {
+            boolean isValidateTopic = true, isValidateManager = true;
+            if (binding.topic.getEditText().getText().toString().isEmpty() ||
+                    binding.topic.getEditText().getText().toString().equals(" ")) {
                 binding.topic.setError("Please, enter a topic !");
-                return;
+                isValidateTopic = false;
+            } else {
+                binding.topic.setError(null);
             }
-            if (binding.manager.getEditText().getText().toString().isEmpty()) {
+            if (binding.manager.getEditText().getText().toString().isEmpty() ||
+                    binding.topic.getEditText().getText().toString().equals(" ")) {
                 binding.manager.setError("Please, enter a manager name");
-                return;
+                isValidateManager = false;
+            } else {
+                binding.manager.setError(null);
             }
-            if (isValidateParticipants.isEmpty()) {
+            if (emails.isEmpty()) {
                 binding.participant.setError("Please, enter at least one participant email");
-                return;
             }
+
+            if (!isValidateTopic || !isValidateManager || emails.isEmpty()) return;
 
             Meeting mNewMeeting = new Meeting(
                     binding.topic.getEditText().getText().toString(),
@@ -96,7 +108,7 @@ public class AddMeetingFragment extends Fragment {
                     binding.toggleButton.getCheckedButtonId(),
                     binding.onAddDate.getText().toString(),
                     binding.onAddHour.getText().toString(),
-                    isValidateParticipants
+                    emails
             );
             mService.onAddMeeting(mNewMeeting);
 
@@ -132,14 +144,18 @@ public class AddMeetingFragment extends Fragment {
     }
 
     private void buildOnAddDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String date = dateFormat.format(c.getTime());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.FRANCE);
+        //String dateString = dateFormat.format(c.getTime());
 
-        binding.onAddDate.setText(date);
+        binding.onAddDate.setText(dateFormat.format(c.getTime()));
         binding.onAddDate.setOnClickListener(view -> {
-            MaterialDatePicker<Long> mMaterialDatePicker = MaterialDatePicker.Builder.datePicker().build();
+            CalendarConstraints.Builder constraints = new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now());
+            MaterialDatePicker<Long> mMaterialDatePicker = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(constraints.build()).build();
             mMaterialDatePicker.show(requireActivity().getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
-            mMaterialDatePicker.addOnPositiveButtonClickListener(selection -> binding.onAddDate.setText(mMaterialDatePicker.getHeaderText()));
+            mMaterialDatePicker.addOnPositiveButtonClickListener(selection -> {
+                Date date = new Date(selection);
+                binding.onAddDate.setText(dateFormat.format(date));
+            });
         });
     }
 
@@ -201,12 +217,15 @@ public class AddMeetingFragment extends Fragment {
                     chip.setText(binding.participant.getEditText().getText());
                     chip.setOnCloseIconClickListener(v -> {
                         binding.participants.removeView(v);
-                        isValidateParticipants.remove(chip.getText().toString());
+                        emails.remove(chip.getText().toString());
                     });
 
                     binding.participants.addView(chip);
-                    isValidateParticipants.add(chip.getText().toString());
-                }
+                    emails.add(chip.getText().toString());
+                    binding.participant.getEditText().getText().clear();
+                } /*else {
+                    binding.participant.setError("Please, Enter a correct email !");
+                }*/
             }
         });
     }
