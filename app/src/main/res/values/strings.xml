@@ -9,7 +9,7 @@
     <string name="filter_by_place">filter by place</string>
     <string name="add_a_meeting">Add a meeting</string>
     <string name="title_activity_add_meeting">AddMeetingActivity</string>
-    
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">Save</string>
