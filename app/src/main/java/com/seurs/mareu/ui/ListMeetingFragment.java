@@ -45,20 +45,25 @@ public class ListMeetingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        binding.topAppBar.inflateMenu(R.menu.menu);
+        //binding.topAppBar.inflateMenu(R.menu.menu);
         binding.topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.filter_by_date) {
+                mMeetings = mService.filterByDate();
+                mAdapter.notifyDataSetChanged();
                 return true;
             } else if (item.getItemId() == R.id.filter_by_place) {
+                mMeetings = mService.filterByPlace();
+                mAdapter.notifyDataSetChanged();
                 return true;
             }
             return false;
         });
 
         binding.onAddMeeting.setOnClickListener(view1 -> {
-            NavHostFragment.findNavController(ListMeetingFragment.this).navigate(R.id.action_ListMeetingFragment_to_AddMeetingFragment);
-            Snackbar.make(view1, "Add a new meeting", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            NavHostFragment.findNavController(ListMeetingFragment.this)
+                    .navigate(R.id.action_ListMeetingFragment_to_AddMeetingFragment);
+            Snackbar.make(view1, "Add a new meeting", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         });
 
         binding.meetingList.setLayoutManager(new LinearLayoutManager(getContext()));
