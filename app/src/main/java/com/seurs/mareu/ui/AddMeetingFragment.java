@@ -56,7 +56,6 @@ public class AddMeetingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         buildTopAppBar();
         buildToggleButton();
         buildOnAddDate();
@@ -68,7 +67,7 @@ public class AddMeetingFragment extends Fragment {
         String email = s.toString();
 
         if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(requireContext(), "Email Validated Successfully", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(requireContext(), "Email Validated Successfully", Toast.LENGTH_SHORT).show();
             return true;
         } else {
             Toast.makeText(requireContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
@@ -102,6 +101,8 @@ public class AddMeetingFragment extends Fragment {
             mService.onAddMeeting(mNewMeeting);
 
             Toast.makeText(requireContext(), "Meeting Validated Successfully", Toast.LENGTH_SHORT).show();
+            NavHostFragment.findNavController(AddMeetingFragment.this)
+                    .navigate(R.id.action_AddMeetingFragment_to_ListMeetingFragment);
         }
     }
 
@@ -113,8 +114,6 @@ public class AddMeetingFragment extends Fragment {
         binding.topAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_on_save) {
                 validate();
-                NavHostFragment.findNavController(AddMeetingFragment.this)
-                        .navigate(R.id.action_AddMeetingFragment_to_ListMeetingFragment);
                 return true;
             }
             return false;
